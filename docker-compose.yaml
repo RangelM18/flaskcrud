@@ -1,0 +1,27 @@
+services:
+  web:
+    build: .
+    container_name: flaskcrud_web
+    ports:
+      - "8081:8081"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:8.0
+    container_name: flaskcrud_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: faztpassword
+      MYSQL_DATABASE: flaskcrud
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./sql/db.sql:/docker-entrypoint-initdb.d/db.sql
+
+volumes:
+  mysql_data:
